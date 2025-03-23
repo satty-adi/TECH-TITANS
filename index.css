@@ -236,3 +236,76 @@
 .dropdown:hover .dropdown-menu {
   display: block;
 }
+
+.footpanel1
+{
+    background-color:#4f6d92;
+    color:white;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85rem;
+    margin-top: 15px;
+}
+.footpanel2
+{
+    background-color: #1e2959;
+    color: white;
+    height: 150px;
+    display: flex;
+    justify-content: space-evenly;
+}
+ul{
+    margin-top: 20px;
+}
+ul a{
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 10px;
+
+}
+ul p{
+    font-size: 1rem;
+    font-weight: 700;
+}
+.footpanel3
+{
+background-color:white;
+border-top: 0.5px solid white;
+height: 40px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.footpanel4
+{
+    background-color: #0F1111;;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    font-size: 0.9rem;
+}
+.copyright
+{
+    background-color: #0F1111;;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+    padding-bottom: 50px;
+}
+.link
+{
+    border: none;
+    color: white;
+    text-decoration: none;
+}
+.xam
+{
+    text-decoration: none;
+    color: white;
+}
