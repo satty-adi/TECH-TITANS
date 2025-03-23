@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Designer - Skills & Description</title>
+    <link rel="stylesheet" href="content-writing.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo"><span class="skill">Skill</span> <span class="matrix">Matrix</span></div>
+    </nav>
+
+    <!-- Description Section -->
+    <div class="container">
+        <h1>Content Writing</h1>
+        <p>Content writing is the process of creating informative, engaging, and well-structured content for websites, blogs, social media, and marketing materials. </p>
+        <h3>Skills Required</h2>
+        <ul>
+            <li>Grammar & Vocabulary </li>
+            <li>Understanding of Social Media </li>
+            <li>Multitasking  </li>
+            <li>Storytelling </li>
+            <br>
+            
+   <button>
+    Click To Apply
+   </button>
+    </div>
+
+</body>
+</html>
