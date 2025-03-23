@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Matrix - AI Bot</title>
+    <link rel="stylesheet" href="ai.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-brand">
+            <span class="skill">Skill</span><span class="matrix">Matrix</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>AI Bot - Search Assistant</h1>
+        <p>Enter your query, and our AI bot will search it for you!</p>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <input type="text" id="query-input" placeholder="Type your query here..." />
+            <button onclick="searchQuery()">Search</button>
+        </div>
+
+        <!-- Search Results Section -->
+        <div id="search-results" class="search-results">
+            <p id="loading-message">Searching... Please wait.</p>
+            <div id="result-options" style="display: none;">
+                <p>Select an option:</p>
+                <div id="options-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Skill Matrix. All rights reserved.</p>
+    </footer>
+
+    <script src="ai.js"></script>
+</body>
+</html>
