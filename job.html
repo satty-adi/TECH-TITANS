@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Matrix - Resume Analysis</title>
+    <link rel="stylesheet" href="job.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-brand">
+            <span class="skill">Skill</span><span class="matrix">Matrix</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Resume Analysis & Job Probability</h1>
+        <p>Upload your resume and we'll analyze it to give you a random job probability score!</p>
+
+        <!-- Upload Resume Section -->
+        <div class="upload-section">
+            <input type="file" id="resume-upload" accept=".pdf,.doc,.docx,.txt">
+            <button onclick="analyzeResume()">Analyze Resume</button>
+        </div>
+
+        <!-- Probability Generator Section -->
+        <div id="probability-container" class="probability-container">
+            <p id="probability-text">Your Job Probability: 0%</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Skill Matrix. All rights reserved.</p>
+    </footer>
+
+    <script src="job.js"></script>
+</body>
+</html>
