@@ -71,5 +71,22 @@
         </div>
        <div class="copyright"> 2025 © , SkillMatrix.com, Inc. or its affiliates</div>
 </footer>
+
+<script>
+  const dropdown = document.querySelector('.dropdown');
+  const dropdownMenu = document.querySelector('.dropdown-menu');
+  const jobsLink = dropdown.querySelector('a');
+
+  jobsLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!dropdown.contains(e.target)) {
+      dropdownMenu.style.display = 'none';
+    }
+  });
+</script>
 </body>
 </html>
