@@ -1,0 +1,47 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f3f1fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #3c12a8;
+    margin-bottom: 2rem;
+  }
+  
+  .gig-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .gig-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  }
+  
+  .gig-card h3 {
+    margin-top: 0;
+    color: #7a57d1;
+  }
+  
+  .gig-card p {
+    margin: 0.5rem 0;
+  }
+  
+  .description {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #444;
+  }
+  

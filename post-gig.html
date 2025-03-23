@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Gig - Skill Matrix</title>
+  <link rel="stylesheet" href="post-gig.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Post a Gig</h1>
+    <form id="gigForm">
+      <input type="text" placeholder="Job Title" required />
+      <input type="text" placeholder="Company Name" required />
+      <textarea placeholder="Job Description" required></textarea>
+      <select required>
+        <option value="">Select Category</option>
+        <option value="Graphic Design">Graphic Design 🎨</option>
+        <option value="Content Writing">Content Writing ✍</option>
+        <option value="Video Editing">Video Editing 🎥</option>
+        <option value="Web Development">Web Development 💻</option>
+        <option value="Social Media Management">Social Media Management 📱</option>
+        <option value="Data Entry & Virtual Assistance">Data Entry & Virtual Assistance ⌨</option>
+        <option value="Tutoring & Mentorship">Tutoring & Mentorship 📚</option>
+      </select>
+      <input type="text" placeholder="Stipend (Optional)" />
+      <button type="submit">Post Gig</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(
+      'https://xbrdnwhekdqmaqtvgifg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicmRud2hla2RxbWFxdHZnaWZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2Mzc0MTcsImV4cCI6MjA1ODIxMzQxN30.8R7_AxxW-7OdxjvizQo1Mzcz-zgeUxKniSSayBKBROk'
+    );
+
+    const form = document.getElementById("gigForm");
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const title = form[0].value.trim();
+      const company = form[1].value.trim();
+      const description = form[2].value.trim();
+      const category = form[3].value;
+      const stipend = form[4].value.trim();
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return alert("Please login first");
+
+      const { error } = await supabase.from("gigs").insert({
+        title,
+        company,
+        description,
+        category,
+        stipend,
+        created_by: user.id
+      });
+
+      if (error) return alert("Error: " + error.message);
+
+      alert("Gig posted successfully!");
+      form.reset();
+    };
+  </script>
+</body>
+</html>

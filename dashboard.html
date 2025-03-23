@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard - Skill Matrix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <header class="dashboard-header">
+    <h1>Welcome, <span class="name-highlight">Student</span></h1>
+    <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar" />
+  </header>
+
+  <main class="dashboard-container">
+    <section class="profile-summary">
+      <h2>Profile</h2>
+      <p><strong>Email:</strong> </p>
+      <p><strong>Skills:</strong> </p>
+      <p><strong>Resume:</strong> <a href="#" id="resume-link" target="_blank">Not uploaded</a></p>
+      <div class="resume-upload">
+        <input type="file" id="resumeFile" accept="application/pdf" />
+        <button class="btn" id="uploadResumeBtn">Upload Resume</button>
+      </div>
+      <button class="btn" id="editBtn">Edit Profile</button>
+    </section>
+
+    <section class="gig-list">
+      <h2>My Gigs</h2>
+      <ul>
+        <li><h3>Frontend Intern - TechSpark</h3><p>Status: <span class="status applied">Applied</span></p></li>
+        <li><h3>Design Consultant - Freelance</h3><p>Status: <span class="status shortlisted">Shortlisted</span></p></li>
+        <li><h3>Backend Developer - CodeLab</h3><p>Status: <span class="status rejected">Rejected</span></p></li>
+      </ul>
+    </section>
+
+    <div class="logout-section">
+      <button class="btn logout-btn">Log Out</button>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabaseUrl = 'https://xbrdnwhekdqmaqtvgifg.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicmRud2hla2RxbWFxdHZnaWZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2Mzc0MTcsImV4cCI6MjA1ODIxMzQxN30.8R7_AxxW-7OdxjvizQo1Mzcz-zgeUxKniSSayBKBROk';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const nameSpan = document.querySelector(".name-highlight");
+    const emailP = document.querySelector(".profile-summary p:nth-of-type(1)");
+    const skillsP = document.querySelector(".profile-summary p:nth-of-type(2)");
+    const resumeA = document.getElementById("resume-link");
+    const logoutBtn = document.querySelector(".logout-btn");
+    const uploadBtn = document.getElementById("uploadResumeBtn");
+    const resumeInput = document.getElementById("resumeFile");
+
+    let currentUser;
+
+    const loadProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'auth.html#login';
+        return;
+      }
+      currentUser = user;
+      const { data, error } = await supabase.from('students').select('*').eq('id', user.id).single();
+      if (data) {
+        nameSpan.textContent = data.name;
+        emailP.innerHTML = `<strong>Email:</strong> ${data.email}`;
+        skillsP.innerHTML = `<strong>Skills:</strong> ${data.skills}`;
+        resumeA.href = data.resume;
+        resumeA.textContent = data.resume === "Not uploaded" ? "Not uploaded" : "View Resume";
+      }
+    };
+
+    loadProfile();
+
+    logoutBtn.onclick = async () => {
+      await supabase.auth.signOut();
+      window.location.href = "auth.html#login";
+    };
+
+    uploadBtn.onclick = async () => {
+      const file = resumeInput.files[0];
+      if (!file) return alert("Please select a PDF file");
+      if (file.type !== "application/pdf") return alert("Only PDF files are allowed");
+
+      const { data, error } = await supabase.storage.from('resumes').upload(`${currentUser.id}.pdf`, file, { upsert: true });
+      if (error) return alert("Upload failed: " + error.message);
+
+      const { data: publicUrl } = supabase.storage.from('resumes').getPublicUrl(`${currentUser.id}.pdf`);
+      const update = await supabase.from('students').update({ resume: publicUrl.publicUrl }).eq('id', currentUser.id);
+      alert("Resume uploaded!");
+      resumeA.href = publicUrl.publicUrl;
+      resumeA.textContent = "View Resume";
+    };
+  </script>
+</body>
+</html>

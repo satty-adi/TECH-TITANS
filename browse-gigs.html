@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Gigs - Skill Matrix</title>
+  <link rel="stylesheet" href="browse-gigs.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Browse Gigs</h1>
+
+    <div class="filter-section">
+      <label for="categoryFilter"><strong>Filter by Category:</strong></label>
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="Graphic Design">Graphic Design 🎨</option>
+        <option value="Content Writing">Content Writing ✍</option>
+        <option value="Video Editing">Video Editing 🎥</option>
+        <option value="Web Development">Web Development 💻</option>
+        <option value="Social Media Management">Social Media Management 📱</option>
+        <option value="Data Entry & Virtual Assistance">Data Entry & Virtual Assistance ⌨</option>
+        <option value="Tutoring & Mentorship">Tutoring & Mentorship 📚</option>
+      </select>
+    </div>
+
+    <div id="gigList" class="gig-list">
+      <!-- Gigs will load here -->
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(
+      'https://xbrdnwhekdqmaqtvgifg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicmRud2hla2RxbWFxdHZnaWZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2Mzc0MTcsImV4cCI6MjA1ODIxMzQxN30.8R7_AxxW-7OdxjvizQo1Mzcz-zgeUxKniSSayBKBROk'
+    );
+
+    const gigList = document.getElementById('gigList');
+    const categoryFilter = document.getElementById('categoryFilter');
+
+    let allGigs = [];
+    let appliedGigIds = [];
+    let currentUser;
+
+    const loadGigs = async () => {
+      const { data: gigs, error } = await supabase.from('gigs').select('*').order('created_at', { ascending: false });
+      const { data: { user } } = await supabase.auth.getUser();
+      currentUser = user;
+
+      if (error) return gigList.innerHTML = `<p>Error loading gigs: ${error.message}</p>`;
+      if (!gigs.length) return gigList.innerHTML = '<p>No gigs available.</p>';
+
+      allGigs = gigs;
+
+      const { data: applications } = await supabase
+        .from('applications')
+        .select('gig_id')
+        .eq('user_id', user?.id);
+
+      appliedGigIds = applications?.map(a => a.gig_id) || [];
+      renderGigs(allGigs);
+    };
+
+    const renderGigs = (gigs) => {
+      gigList.innerHTML = '';
+      gigs.forEach(gig => {
+        const gigCard = document.createElement('div');
+        gigCard.className = 'gig-card';
+        gigCard.innerHTML = `
+          <h3>${gig.title}</h3>
+          <p><strong>Company:</strong> ${gig.company}</p>
+          <p><strong>Category:</strong> ${gig.category}</p>
+          <p><strong>Stipend:</strong> ${gig.stipend || 'N/A'}</p>
+          <p class="description">${gig.description}</p>
+        `;
+
+        const applyBtn = document.createElement('button');
+        applyBtn.className = 'apply-btn';
+        applyBtn.innerText = appliedGigIds.includes(gig.id) ? 'Applied' : 'Apply';
+        applyBtn.disabled = appliedGigIds.includes(gig.id);
+
+        applyBtn.onclick = async () => {
+          if (!currentUser) return alert("You must be logged in to apply.");
+
+          const { error: applyError } = await supabase.from('applications').insert({
+            gig_id: gig.id,
+            user_id: currentUser.id
+          });
+
+          if (applyError) return alert("Failed to apply: " + applyError.message);
+
+          alert("Application submitted!");
+          applyBtn.innerText = 'Applied';
+          applyBtn.disabled = true;
+        };
+
+        gigCard.appendChild(applyBtn);
+        gigList.appendChild(gigCard);
+      });
+    };
+
+    categoryFilter.addEventListener("change", () => {
+      const selected = categoryFilter.value;
+      if (selected === 'all') return renderGigs(allGigs);
+      const filtered = allGigs.filter(gig => gig.category === selected);
+      renderGigs(filtered);
+    });
+
+    loadGigs();
+  </script>
+</body>
+</html>

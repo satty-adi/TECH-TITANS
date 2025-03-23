@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Applications - Skill Matrix</title>
+  <link rel="stylesheet" href="my-applications.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>My Applications</h1>
+    <div id="applicationList" class="application-list">
+      <!-- Applied gigs will be listed here -->
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(
+      'https://xbrdnwhekdqmaqtvgifg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicmRud2hla2RxbWFxdHZnaWZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2Mzc0MTcsImV4cCI6MjA1ODIxMzQxN30.8R7_AxxW-7OdxjvizQo1Mzcz-zgeUxKniSSayBKBROk'
+    );
+
+    const applicationList = document.getElementById('applicationList');
+
+    const loadApplications = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'auth.html#login';
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('applications')
+        .select('*, gigs(*)')
+        .eq('user_id', user.id);
+
+      if (error) return applicationList.innerHTML = `<p>Error: ${error.message}</p>`;
+      if (!data.length) return applicationList.innerHTML = '<p>You haven\'t applied to any gigs yet.</p>';
+
+      data.forEach(app => {
+        const gig = app.gigs;
+        const card = document.createElement('div');
+        card.className = 'application-card';
+        card.innerHTML = `
+          <h3>${gig.title}</h3>
+          <p><strong>Company:</strong> ${gig.company}</p>
+          <p><strong>Category:</strong> ${gig.category}</p>
+          <p><strong>Stipend:</strong> ${gig.stipend || 'N/A'}</p>
+          <p class="description">${gig.description}</p>
+          <p class="applied-on">Applied On: ${new Date(app.applied_at).toLocaleDateString()}</p>
+        `;
+        applicationList.appendChild(card);
+      });
+    };
+
+    loadApplications();
+  </script>
+</body>
+</html>
