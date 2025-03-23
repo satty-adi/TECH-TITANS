@@ -1,0 +1,120 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Style */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: white;
+    border-bottom: 2px solid #ddd;
+}
+
+.navbar-brand {
+    font-size: 30px;
+    font-weight: 1000;
+}
+
+.skill {
+    color: #184bae;
+}
+
+.matrix {
+    color: #3c12a8;
+}
+
+/* Main Content Styling */
+.main-content {
+    padding: 40px 30px;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+/* Input Section */
+.input-section {
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #184bae;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3c12a8;
+}
+
+/* Search Results Section */
+.search-results {
+    margin-top: 30px;
+}
+
+#loading-message {
+    font-size: 18px;
+    color: #888;
+}
+
+#options-container {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+#options-container div {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#options-container div:hover {
+    background-color: #dcdcdc;
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #3c12a8;
+    color: white;
+}
